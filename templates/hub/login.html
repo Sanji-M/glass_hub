@@ -2,13 +2,20 @@
 <head>
     <title>Login</title>
 </head>
+
 <body>
     <h1>Login</h1>
+    <div> 
+
+    </div>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        {{}}
+        {{form.non_field_errors}}  <!-- for displaying errors -->
+        {{form.username}}
+        {{form.password}}
         <button type="submit">Login</button>
+        
+        <a href="{% url 'signup' %}">Sign_Up</a>
     </form>
 </body>
 </html>
