@@ -7,8 +7,21 @@ from .forms import SignupForm
 # My views
 @login_required
 def dashboard(request):
-
+    if request.htmx:
+        return render(request,'hub/_dashboard_content.html')
     return render(request,'hub/dashboard.html')
+
+@login_required
+def board_view(request):
+    if request.htmx:
+        return render(request, 'hub/_board_content.html')
+    return render(request, 'hub/board.html')
+
+@login_required
+def settings_view(request):
+    if request.htmx:
+        return render(request, 'hub/_settings_content.html')
+    return render(request,'hub/settings.html')
 
 #signup view over here
 # Handles post request and get request

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}GlassHub{% endblock %}</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <nav>
+        <!-- music player goes here -->
+
+        <a href="{% url 'dashboard' %}"
+           hx-get="{% url 'dashboard' %}"
+           hx-target="#content"
+           hx-swap="innerHTML"
+           hx-push-url="true">
+           Home
+        </a>
+
+        <a href="{% url 'board' %}"
+           hx-get="{% url 'board' %}"
+           hx-target="#content"
+           hx-swap="innerHTML"
+           hx-push-url="true"> 
+           Board
+        </a>
+
+        <a href="{% url 'settings' %}"
+           hx-get="{% url 'settings' %}"
+           hx-target="#content"
+           hx-swap="innerHTML"
+           hx-push-url="true">
+           Settings 
+        </a>
+
+        <!-- chat icon -->
+        <!-- profile + online dot -->
+    </nav>
+
+    <main id="content">
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>
