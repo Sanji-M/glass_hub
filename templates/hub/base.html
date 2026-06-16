@@ -2,44 +2,66 @@
 <html lang="en">
 <head>
     <title>{% block title %}GlassHub{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
 
-    <nav>
-        <!-- music player goes here -->
+    <div class="bg-layer"></div>
 
-        <a href="{% url 'dashboard' %}"
-           hx-get="{% url 'dashboard' %}"
-           hx-target="#content"
-           hx-swap="innerHTML"
-           hx-push-url="true">
-           Home
-        </a>
+    <nav class="glass-nav">
 
-        <a href="{% url 'board' %}"
-           hx-get="{% url 'board' %}"
-           hx-target="#content"
-           hx-swap="innerHTML"
-           hx-push-url="true"> 
-           Board
-        </a>
+        <div class="nav-left">
+            <!-- music player placeholder — Phase 3 Step C -->
+            <div class="music-placeholder">🎵 Music Player</div>
+        </div>
 
-        <a href="{% url 'settings' %}"
-           hx-get="{% url 'settings' %}"
-           hx-target="#content"
-           hx-swap="innerHTML"
-           hx-push-url="true">
-           Settings 
-        </a>
+        <div class="nav-links">
+            <a href="{% url 'dashboard' %}"
+               hx-get="{% url 'dashboard' %}"
+               hx-target="#content"
+               hx-swap="innerHTML"
+               hx-push-url="true"
+               class="nav-link">Home</a>
 
-        <!-- chat icon -->
-        <!-- profile + online dot -->
+            <a href="{% url 'board' %}"
+               hx-get="{% url 'board' %}"
+               hx-target="#content"
+               hx-swap="innerHTML"
+               hx-push-url="true"
+               class="nav-link">Board</a>
+
+            <a href="{% url 'settings' %}"
+               hx-get="{% url 'settings' %}"
+               hx-target="#content"
+               hx-swap="innerHTML"
+               hx-push-url="true"
+               class="nav-link">Settings</a>
+        </div>
+
+        <div class="nav-right">
+            <span class="nav-icon nav-search">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            </span>
+
+            <span class="nav-icon nav-chat" id="chat-toggle">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </span>
+
+            <div class="nav-profile">
+                <span class="profile-name">{{ request.user.first_name }}</span>
+                <div class="profile-avatar">
+                    <span class="online-dot"></span>
+                </div>
+            </div>
+        </div>
+
     </nav>
 
-    <main id="content">
+    <main id="content" class="main-content">
         {% block content %}{% endblock %}
     </main>
 

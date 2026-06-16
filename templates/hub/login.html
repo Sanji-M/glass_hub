@@ -1,21 +1,48 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Login</title>
+    <title>Login — GlassHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-
 <body>
-    <h1>Login</h1>
-    <div> 
+<div class="auth-page">
+    <div class="auth-card">
+
+        <div class="auth-avatar">
+            <img src="{% static 'images/default-avatar.jpg' %}" alt="avatar">
+        </div>
+
+        <h1 class="auth-title">Welcome Back</h1>
+        <p class="auth-subtitle">Please log in...</p>
+
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="auth-errors">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="form-group">
+                <label class="form-label">Enter your name...</label>
+                {{ form.username }}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Enter Password</label>
+                {{ form.password }}
+            </div>
+
+            <button type="submit" class="auth-btn">LOG IN</button>
+        </form>
+
+        <span class="auth-link">
+            Don't have an account? <a href="{% url 'signup' %}">Sign Up</a>
+        </span>
 
     </div>
-    <form method="post">
-        {% csrf_token %}
-        {{form.non_field_errors}}  <!-- for displaying errors -->
-        {{form.username}}
-        {{form.password}}
-        <button type="submit">Login</button>
-        
-        <a href="{% url 'signup' %}">Sign_Up</a>
-    </form>
+</div>
 </body>
 </html>
