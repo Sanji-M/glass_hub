@@ -3,13 +3,19 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.shortcuts import render,redirect
 from .forms import SignupForm
+from .models import Suggestion, TodoItem
+from django.shortcuts import get_object_or_404
 
 # My views
 @login_required
 def dashboard(request):
+    todos = TodoItem.objects.filter(owner=request.user).order_by('-created_at')
+    suggestions = Suggestion.objects.filter(is_active=True)
+    context = {'todos': todos, 'suggestions': suggestions}
     if request.htmx:
-        return render(request,'hub/_dashboard_content.html')
-    return render(request,'hub/dashboard.html')
+        return render(request,'hub/_dashboard_content.html', context)
+        
+    return render(request,'hub/dashboard.html', context)
 
 @login_required
 def board_view(request):
@@ -53,3 +59,35 @@ def signup_view(request):
         form = SignupForm()  
 
     return render(request,'hub/signup.html',{'form':form})
+
+@login_required
+def create_todo(request):
+    if request.method == "POST":
+        title = request.POST.get('title')
+        detail = request.POST.get('detail')
+
+        if title:
+
+            todo = TodoItem.objects.create(
+                 title = title,
+                 detail= detail,
+                 owner = request.user
+
+            )
+    todos = TodoItem.objects.filter(owner=request.user).order_by('-created_at')
+    return render(request,'hub/_todo_list.html',{'todos':todos})
+
+@login_required
+def todo_toggle(request,id):
+        todo = get_object_or_404(TodoItem,id=id,owner = request.user)
+        todo.is_complete = not todo.is_complete
+        todo.save()
+        todos = TodoItem.objects.filter(owner=request.user).order_by('-created_at')
+        return render(request,'hub/_todo_list.html',{'todos':todos})
+
+@login_required
+def todo_delete(request,id):
+    todo =get_object_or_404(TodoItem,id=id,owner =request.user)
+    todo.delete()
+    todos = TodoItem.objects.filter(owner=request.user).order_by('-created_at')
+    return render(request,'hub/_todo_list.html',{'todos':todos})

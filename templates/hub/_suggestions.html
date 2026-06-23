@@ -1,0 +1,23 @@
+<div class="panel-header">
+    <h3>
+        <i data-lucide="sparkles" class="panel-icon"></i>
+        Messages &amp; Suggestions
+    </h3>
+    <span class="panel-dots">⋯</span>
+</div>
+
+{% if suggestions %}
+    {% for suggestion in suggestions %}
+    <div class="suggestion-item">
+        <span class="suggestion-icon">{{ suggestion.icon }}</span>
+        <div>
+            <strong>{{ suggestion.title }}</strong>
+            {% if suggestion.description %}
+                <p>{{ suggestion.description }}</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <p class="suggestions-empty">No suggestions right now.</p>
+{% endif %}

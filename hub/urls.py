@@ -10,6 +10,9 @@ urlpatterns = [
     path('logout/',auth_views.LogoutView.as_view(next_page='login') ,name='logout'),
     path('',views.dashboard,name='dashboard' ),
     path('board/',views.board_view,name='board'),
-    path('settings/',views.settings_view,name='settings')
+    path('settings/',views.settings_view,name='settings'),
+    path('todo/create/',views.create_todo,name='todo-create'),
+    path('todo/<int:id>/toggle/',views.todo_toggle,name='todo-toggle'),
+    path('todo/<int:id>/delete/',views.todo_delete,name='todo-delete')
 
 ]

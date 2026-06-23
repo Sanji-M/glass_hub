@@ -1,0 +1,30 @@
+{% if todos %}
+    <ul class="todo-items">
+        {% for todo in todos %}
+        <li class="todo-item {% if todo.is_complete %}completed{% endif %}">
+            <label class="todo-check">
+                <input type="checkbox"
+                       {% if todo.is_complete %}checked{% endif %}
+                       hx-post="{% url 'todo-toggle' todo.id %}"
+                       hx-target="#todo-list-wrap"
+                       hx-swap="innerHTML">
+                <span class="checkmark"></span>
+            </label>
+
+            <div class="todo-text">
+                <span class="todo-title">{{ todo.title }}</span>
+                {% if todo.detail %}
+                    <span class="todo-detail">{{ todo.detail }}</span>
+                {% endif %}
+            </div>
+
+            <button class="todo-delete"
+                    hx-post="{% url 'todo-delete' todo.id %}"
+                    hx-target="#todo-list-wrap"
+                    hx-swap="innerHTML">×</button>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p class="todo-empty">No to-dos yet. Add one above.</p>
+{% endif %}
