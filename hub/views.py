@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.shortcuts import render,redirect
 from .forms import SignupForm
-from .models import Suggestion, TodoItem
+from .models import Suggestion, TodoItem, Memory
 from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_POST
 
 # My views
 @login_required
@@ -91,3 +92,54 @@ def todo_delete(request,id):
     todo.delete()
     todos = TodoItem.objects.filter(owner=request.user).order_by('-created_at')
     return render(request,'hub/_todo_list.html',{'todos':todos})
+
+@login_required
+def memories(request):
+    own = Memory.objects.filter(user=request.user).order_by('-created_at')
+    others = Memory.objects.exclude(user=request.user).order_by('-created_at')
+    memories= list(own) + list(others)
+    context = {'memories':memories}
+    if request.htmx:
+        return render(request,'hub/_memories_content.html',context)
+    return render(request,'hub/memories.html',context)
+
+@login_required
+@require_POST
+def memory_create(request):
+        content = request.POST.get('content')
+        memory = Memory.objects.create(
+               content = content,
+               user = request.user
+            )
+        own = Memory.objects.filter(user=request.user).order_by('-created_at')
+        others = Memory.objects.exclude(user=request.user).order_by('-created_at')
+        memories = list(own) + list(others)
+
+      
+        
+        
+        return render(request,'hub/_memory_card.html',{'memories':memories})
+
+@login_required
+@require_POST
+def memory_delete(request,id):
+        memory = get_object_or_404(Memory,id=id,user=request.user)
+        memory.delete()
+        own = Memory.objects.filter(user=request.user).order_by('-created_at')
+        others = Memory.objects.exclude(user=request.user).order_by('-created_at')
+        memories = list(own) + list(others)
+
+        return render(request,'hub/_memory_card.html',{'memories':memories})
+    
+@login_required
+@require_POST
+def memory_update_colour(request,id):
+        memory = get_object_or_404(Memory,id=id,user=request.user)
+        colour = request.POST.get('colour')  
+        memory.colour = colour #does this handle get current colour var & update with the request colour
+        memory.save()
+        own = Memory.objects.filter(user=request.user).order_by('-created_at')
+        others = Memory.objects.exclude(user=request.user).order_by('-created_at')
+        memories = list(own) + list(others)
+
+        return render(request,'hub/_memory_card.html',{'memories':memories})

@@ -10,10 +10,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
-
 <body>
-
-
 
 <script>
 document.body.addEventListener('htmx:configRequest', (event) => {
@@ -28,7 +25,6 @@ document.body.addEventListener('htmx:configRequest', (event) => {
     ═══════════════════════════════════════ -->
     <aside class="sidebar" id="sidebar">
 
-        <!-- Top: logo + toggle -->
         <div class="sidebar-top">
             <div class="sidebar-logo">
                 <span class="logo-icon">
@@ -41,14 +37,13 @@ document.body.addEventListener('htmx:configRequest', (event) => {
             </button>
         </div>
 
-        <!-- Nav links -->
         <nav class="sidebar-nav">
             <a href="{% url 'dashboard' %}"
                hx-get="{% url 'dashboard' %}"
                hx-target="#content"
                hx-swap="innerHTML"
                hx-push-url="true"
-               class="sidebar-link" id="nav-dashboard">
+               class="sidebar-link">
                 <i data-lucide="house"></i>
                 <span class="link-label">Dashboard</span>
             </a>
@@ -58,9 +53,19 @@ document.body.addEventListener('htmx:configRequest', (event) => {
                hx-target="#content"
                hx-swap="innerHTML"
                hx-push-url="true"
-               class="sidebar-link" id="nav-board">
+               class="sidebar-link">
                 <i data-lucide="layout-list"></i>
                 <span class="link-label">Board</span>
+            </a>
+
+            <a href="{% url 'memories' %}"
+               hx-get="{% url 'memories' %}"
+               hx-target="#content"
+               hx-swap="innerHTML"
+               hx-push-url="true"
+               class="sidebar-link">
+                <i data-lucide="brain"></i>
+                <span class="link-label">Memories</span>
             </a>
 
             <a href="{% url 'settings' %}"
@@ -68,13 +73,12 @@ document.body.addEventListener('htmx:configRequest', (event) => {
                hx-target="#content"
                hx-swap="innerHTML"
                hx-push-url="true"
-               class="sidebar-link" id="nav-settings">
+               class="sidebar-link">
                 <i data-lucide="settings"></i>
                 <span class="link-label">Settings</span>
             </a>
         </nav>
 
-        <!-- Bottom: profile -->
         <div class="sidebar-bottom">
             <div class="sidebar-profile">
                 <div class="profile-avatar">
@@ -95,9 +99,6 @@ document.body.addEventListener('htmx:configRequest', (event) => {
             {% block content %}{% endblock %}
         </main>
 
-        <!-- ═══════════════════════════════════
-             MUSIC PLAYER — bottom bar
-        ═══════════════════════════════════ -->
         <div class="music-player" id="music-player">
 
             <div class="player-art" id="player-art">
@@ -110,13 +111,13 @@ document.body.addEventListener('htmx:configRequest', (event) => {
             </div>
 
             <div class="player-controls">
-                <button class="player-btn" id="prev-btn" onclick="prevTrack()">
+                <button class="player-btn" onclick="prevTrack()">
                     <i data-lucide="skip-back"></i>
                 </button>
-                <button class="player-btn player-btn-main" id="play-btn" onclick="togglePlay()">
+                <button class="player-btn player-btn-main" onclick="togglePlay()">
                     <i data-lucide="play" id="play-icon-i"></i>
                 </button>
-                <button class="player-btn" id="next-btn" onclick="nextTrack()">
+                <button class="player-btn" onclick="nextTrack()">
                     <i data-lucide="skip-forward"></i>
                 </button>
                 <button class="player-btn" onclick="volumeDown()">
@@ -148,24 +149,19 @@ document.body.addEventListener('htmx:configRequest', (event) => {
             </script>
 
         </div>
-        <!-- end music-player -->
 
     </div>
-    <!-- end main-wrapper -->
 
 </div>
-<!-- end app-shell -->
 
-
-
- <script>
-// ── Sidebar toggle ───────────────────────────────────
+<script>
+// ── Sidebar toggle ────────────────────────────────────────────
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     sidebar.classList.toggle('collapsed');
 }
 
-// ── Active nav link highlight ────────────────────────
+// ── Active nav link ───────────────────────────────────────────
 function setActiveLink() {
     const path = window.location.pathname;
     document.querySelectorAll('.sidebar-link').forEach(link => {
@@ -179,10 +175,9 @@ function setActiveLink() {
 document.addEventListener('DOMContentLoaded', setActiveLink);
 document.addEventListener('htmx:pushedIntoHistory', setActiveLink);
 
-// ── Load track data from Django ──────────────────────
-const trackData = document.getElementById('track-data');
-const tracks = trackData ? JSON.parse(trackData.textContent) : [];
-
+// ── Music player ──────────────────────────────────────────────
+const trackData  = document.getElementById('track-data');
+const tracks     = trackData ? JSON.parse(trackData.textContent) : [];
 const audio      = document.getElementById('audio-engine');
 const titleEl    = document.getElementById('player-title');
 const artistEl   = document.getElementById('player-artist');
@@ -192,12 +187,12 @@ const playIconEl = document.getElementById('play-icon-i');
 
 let currentIndex = 0;
 let isPlaying    = false;
-audio.volume = 0.7;
+audio.volume     = 0.7;
 
 function loadTrack(index) {
     if (!tracks.length) return;
-    const track = tracks[index];
-    audio.src = track.url;
+    const track          = tracks[index];
+    audio.src            = track.url;
     titleEl.textContent  = track.title;
     artistEl.textContent = track.artist;
     progressEl.value     = 0;
@@ -209,14 +204,14 @@ function togglePlay() {
     if (audio.src === '' || !audio.src.includes('tracks')) {
         loadTrack(currentIndex);
     }
- if (isPlaying) {
-    audio.pause();
-    playIconEl.setAttribute('data-lucide', 'play');
-} else {
-    audio.play();
-    playIconEl.setAttribute('data-lucide', 'pause');
-}
-lucide.createIcons();
+    if (isPlaying) {
+        audio.pause();
+        playIconEl.setAttribute('data-lucide', 'play');
+    } else {
+        audio.play();
+        playIconEl.setAttribute('data-lucide', 'pause');
+    }
+    lucide.createIcons();
     isPlaying = !isPlaying;
 }
 
@@ -243,21 +238,59 @@ function seekTo(value) {
 
 audio.addEventListener('timeupdate', () => {
     if (audio.duration) {
-        const pct = (audio.currentTime / audio.duration) * 100;
+        const pct          = (audio.currentTime / audio.duration) * 100;
         progressEl.value   = pct;
         timeEl.textContent = Math.round(pct) + '%';
     }
 });
 
-audio.addEventListener('ended', () => { nextTrack(); });
+audio.addEventListener('ended', nextTrack);
 
 if (tracks.length) loadTrack(0);
 
+// ── Todo form ─────────────────────────────────────────────────
 function toggleTodoForm() {
     const form = document.getElementById('todo-create-form');
     if (form) form.classList.toggle('hidden');
 }
+
+// ── Lucide + HTMX afterSwap ───────────────────────────────────
+lucide.createIcons();
+
+document.addEventListener('htmx:afterSwap', () => {
+    lucide.createIcons();
+    document.querySelectorAll('.memory-card.expanded')
+        .forEach(c => c.classList.remove('expanded'));
+    const backdrop = document.getElementById('memory-backdrop');
+    if (backdrop) backdrop.classList.remove('active');
+});
+
+// ── Memory card expand/collapse ───────────────────────────────
+document.addEventListener('click', function(e) {
+    const backdrop = document.getElementById('memory-backdrop');
+
+    if (e.target && (e.target.id === 'memory-backdrop' ||
+        e.target.classList.contains('memory-backdrop'))) {
+        document.querySelectorAll('.memory-card.expanded')
+            .forEach(c => c.classList.remove('expanded'));
+        if (backdrop) backdrop.classList.remove('active');
+        return;
+    }
+
+    if (e.target.closest('.memory-delete-btn') ||
+        e.target.closest('.colour-dot')) return;
+
+    const card = e.target.closest('.memory-card');
+    if (card) {
+        document.querySelectorAll('.memory-card.expanded')
+            .forEach(c => c.classList.remove('expanded'));
+        card.classList.add('expanded');
+        if (backdrop) backdrop.classList.add('active');
+        lucide.createIcons();
+        return;
+    }
+});
 </script>
-<script>lucide.createIcons();</script>
+
 </body>
 </html>

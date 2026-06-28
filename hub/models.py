@@ -34,3 +34,26 @@ class Suggestion(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+class Memory(models.Model):
+    COLOURS = [
+        ('#FEF3C7', 'Amber'),
+        ('#DBEAFE', 'Blue'),
+        ('#D1FAE5', 'Green'),
+        ('#EDE9FE', 'Lavender'),
+        ('#FCE7F3', 'Blush'),
+        ('#FFE4E1', 'Rose'),
+
+    ]
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='memories')
+    content =models.TextField()
+    colour =models.CharField(max_length=10, default='#FEF3C7')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class Meta:
+    ordering = ['_created_at']
+
+def __str__(self):
+    return f"{self.user.username} - {self.created_at:%Y-%m-%d}"

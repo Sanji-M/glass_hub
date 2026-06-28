@@ -1,0 +1,66 @@
+{% if memories %}
+    <div class="memory-grid">
+        {% for memory in memories %}
+        <div class="memory-card" style="background-color: {{ memory.colour }};">
+
+            <div class="memory-body">
+                <p class="memory-content">{{ memory.content }}</p>
+            </div>
+
+            <div class="memory-footer">
+                <span class="memory-author">{{ memory.user.first_name }}</span>
+                <span class="memory-date">{{ memory.created_at|date:"M d, Y" }}</span>
+
+                <div class="memory-colours">
+                    <button class="colour-dot" style="background-color: #FEF3C7;"
+                            hx-post="{% url 'memory-colour' memory.id %}"
+                            hx-vals='{"colour": "#FEF3C7"}'
+                            hx-target="#memory-grid"
+                            hx-swap="innerHTML"></button>
+                    <button class="colour-dot" style="background-color: #DBEAFE;"
+                            hx-post="{% url 'memory-colour' memory.id %}"
+                            hx-vals='{"colour": "#DBEAFE"}'
+                            hx-target="#memory-grid"
+                            hx-swap="innerHTML"></button>
+                    <button class="colour-dot" style="background-color: #D1FAE5;"
+                            hx-post="{% url 'memory-colour' memory.id %}"
+                            hx-vals='{"colour": "#D1FAE5"}'
+                            hx-target="#memory-grid"
+                            hx-swap="innerHTML"></button>
+                    <button class="colour-dot" style="background-color: #EDE9FE;"
+                            hx-post="{% url 'memory-colour' memory.id %}"
+                            hx-vals='{"colour": "#EDE9FE"}'
+                            hx-target="#memory-grid"
+                            hx-swap="innerHTML"></button>
+                    <button class="colour-dot" style="background-color: #FCE7F3;"
+                            hx-post="{% url 'memory-colour' memory.id %}"
+                            hx-vals='{"colour": "#FCE7F3"}'
+                            hx-target="#memory-grid"
+                            hx-swap="innerHTML"></button>
+                    <button class="colour-dot" style="background-color: #FFE4E1;"
+                            hx-post="{% url 'memory-colour' memory.id %}"
+                            hx-vals='{"colour": "#FFE4E1"}'
+                            hx-target="#memory-grid"
+                            hx-swap="innerHTML"></button>
+                </div>
+
+                {% if request.user == memory.user %}
+                <button class="memory-delete-btn"
+                        hx-post="{% url 'memory-delete' memory.id %}"
+                        hx-target="#memory-grid"
+                        hx-swap="innerHTML"
+                        hx-confirm="Delete this memory?">
+                    <i data-lucide="trash-2"></i>
+                </button>
+                {% endif %}
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="memory-empty">
+        <i data-lucide="brain"></i>
+        <p>No memories yet. Add your first one.</p>
+    </div>
+{% endif %}

@@ -13,6 +13,10 @@ urlpatterns = [
     path('settings/',views.settings_view,name='settings'),
     path('todo/create/',views.create_todo,name='todo-create'),
     path('todo/<int:id>/toggle/',views.todo_toggle,name='todo-toggle'),
-    path('todo/<int:id>/delete/',views.todo_delete,name='todo-delete')
+    path('todo/<int:id>/delete/',views.todo_delete,name='todo-delete'),
+    path('memories/',views.memories,name='memories'),
+    path('memories/create/',views.memory_create,name='memory-create'),
+    path('memories/<int:id>/delete/',views.memory_delete,name='memory-delete'),
+    path('memories/<int:id>/colour/',views.memory_update_colour,name='memory-colour')
 
-]
+    ]
